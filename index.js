@@ -1,9 +1,9 @@
 const express = require('express');
-//const cors = require('cors');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const app = express();
-//app.use(cors());
+app.use(cors());
 const jsonParser = express.json();
 const port = process.env.PORT || 3000;
 
