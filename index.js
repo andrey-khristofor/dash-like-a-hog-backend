@@ -50,6 +50,24 @@ const Currency = mongoose.model("Currency", currencyScheme);
         });
     });
 
+    app.get("/api/users/filter/:value", function (req, res) {
+
+        const value = req.params.value;
+        console.log(value, value.length);
+        if (value.length === 24) {
+            User.findOne({_id: value}, function (err, user) {
+
+                if (err) return console.log(err);
+                res.send([user]);
+            });
+        } else {
+            User.find({name: { "$regex": value, "$options": "i" }} , function (err, result) {
+                if (err) return console.log(err);
+                res.send(result)
+            })
+        }
+    });
+
     app.post("/api/users", jsonParser, (req, res) => {
 
         if (!req.body) return res.sendStatus(400);
@@ -80,7 +98,10 @@ const Currency = mongoose.model("Currency", currencyScheme);
         User.findByIdAndDelete(id, null, (err, user) => {
 
             if (err) return console.log(err);
-            res.send(user);
+            User.find({}, function (err, users) {
+                if (err) return console.log(err);
+                res.send(users)
+            });
         });
     });
 
@@ -155,7 +176,12 @@ const Currency = mongoose.model("Currency", currencyScheme);
         Contract.findByIdAndDelete(id, null, (err, contract) => {
 
             if (err) return console.log(err);
-            res.send(contract);
+            Contract.find({}, function (err, contracts) {
+
+
+                if (err) return console.log(err);
+                res.send(contracts)
+            });
         });
     });
 
@@ -209,7 +235,7 @@ const Currency = mongoose.model("Currency", currencyScheme);
         const taskPrice = req.body.price;
         const taskCurrencyId = req.body.currencyId;
         const taskDescription = req.body.description;
-        const taskPhotoURLs = req.body.photoURL.length ? [...req.body.photoURL] : [];
+        const taskPhotoURLs = req.body.photoUrl.length ? [...req.body.photoUrl] : [];
         const taskDeadline = new Date(req.body.deadline);
         const task = new Task({
             specializationId: taskSpecializationId,
@@ -232,7 +258,11 @@ const Currency = mongoose.model("Currency", currencyScheme);
         Task.findByIdAndDelete(id, null, (err, task) => {
 
             if (err) return console.log(err);
-            res.send(task);
+            Task.find({}, function (err, tasks) {
+
+                if (err) return console.log(err);
+                res.send(tasks)
+            });
         });
     });
 
@@ -244,7 +274,7 @@ const Currency = mongoose.model("Currency", currencyScheme);
         const taskPrice = req.body.price;
         const taskCurrencyId = req.body.currencyId;
         const taskDescription = req.body.description;
-        const taskPhotoURLs = [...req.body.photoURL];
+        const taskPhotoURLs = req.body.photoUrl.length ? [...req.body.photoUrl] : [];
         const taskDeadline = new Date(req.body.deadline);
 
         Task.findOneAndUpdate({_id: id}, {
@@ -303,7 +333,11 @@ const Currency = mongoose.model("Currency", currencyScheme);
         Specialization.findByIdAndDelete(id, null, (err, specialization) => {
 
             if (err) return console.log(err);
-            res.send(specialization);
+            Specialization.find({}, function (err, specializations) {
+
+                if (err) return console.log(err);
+                res.send(specializations)
+            });
         });
     });
 
@@ -366,7 +400,11 @@ const Currency = mongoose.model("Currency", currencyScheme);
         Currency.findByIdAndDelete(id, null, (err, currency) => {
 
             if (err) return console.log(err);
-            res.send(currency);
+            Currency.find({}, function (err, currencies) {
+
+                if (err) return console.log(err);
+                res.send(currencies)
+            });
         });
     });
 
